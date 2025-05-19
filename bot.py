@@ -7,7 +7,7 @@ import telebot
 logging.basicConfig(level=logging.INFO)
 
 # Получение токенов из переменных окружения
-TELEGRAM_BOT_TOKEN = os.getenv("7993226123:AAEGqtEokjNBP97gYjJdGkrpII3Vpm3QGok")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Инициализация клиентов
