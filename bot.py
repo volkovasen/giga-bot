@@ -16,7 +16,7 @@ openai.api_key = OPENAI_API_KEY
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Я GigaBot 🤖 Можешь написать мне любой вопрос!")
+    bot.reply_to(message, "Привет! Я GigaVolchik 🐺 Можешь написать мне любой вопрос!")
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
