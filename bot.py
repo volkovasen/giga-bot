@@ -12,7 +12,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Инициализация клиентов
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
-openai.api_key = OPENAI_API_KEY
+client = openai.OpenAI(api_key=OPENAI_API_KEY)  # Новый синтаксис
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -22,7 +22,7 @@ def send_welcome(message):
 def handle_message(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(  # Новый метод
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": message.text}]
         )
