@@ -1,30 +1,39 @@
 import os
 import logging
-import openai
 import telebot
+import openai
 
 # Настройка логгера
 logging.basicConfig(level=logging.INFO)
 
-# Получение токенов из переменных окружения
+# Токены из переменных окружения
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-# Инициализация клиентов
+# Конфигурация клиента OpenAI через OpenRouter
+openai_client = openai.OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=OPENROUTER_API_KEY,
+)
+
+# Инициализация телеграм-бота
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
-client = openai.OpenAI(api_key=OPENAI_API_KEY)  # Новый синтаксис
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Я GigaVolchik 🐺 Можешь написать мне любой вопрос!")
+    bot.reply_to(message, "Привет! Я GigaVolchik 🐺 Спроси меня что угодно!")
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
     try:
         bot.send_chat_action(message.chat.id, 'typing')
-        response = client.chat.completions.create(  # Новый метод
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": message.text}]
+
+        response = openai_client.chat.completions.create(
+            model="openai/gpt-3.5-turbo",  # Можно менять модель (ниже список)
+            messages=[
+                {"role": "system", "content": "Ты дружелюбный и умный помощник."},
+                {"role": "user", "content": message.text}
+            ]
         )
         reply = response.choices[0].message.content
         bot.reply_to(message, reply)
